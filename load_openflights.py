@@ -5,6 +5,11 @@ import pandas as pd
 from neo4j import GraphDatabase, basic_auth
 from tqdm import tqdm
 
+# NEO4J_URI="neo4j://127.0.0.1:7687"
+NEO4J_URI="bolt://127.0.0.1:7687"
+NEO4J_USER="neo4j"
+NEO4J_PASSWORD="password"
+
 
 def parse_airports(path: str) -> list:
     """Parse airports.dat into a list of dictionaries.
@@ -14,7 +19,7 @@ def parse_airports(path: str) -> list:
         1: Name
         2: City
         3: Country
-        4: IATA code (may be \N)
+        4: IATA code (may be "\\N" to denote a missing value)
         5: ICAO code
         6: Latitude
         7: Longitude
@@ -211,15 +216,15 @@ def main():
         description="Load OpenFlights data into Neo4j."
     )
     parser.add_argument(
-        '--uri', default=os.environ.get('NEO4J_URI'),
+        '--uri', default=os.environ.get('NEO4J_URI',NEO4J_URI),
         help='Bolt URI of the Neo4j database (e.g. bolt://localhost:7687)'
     )
     parser.add_argument(
-        '--user', default=os.environ.get('NEO4J_USER'),
+        '--user', default=os.environ.get('NEO4J_USER',NEO4J_USER),
         help='Neo4j username'
     )
     parser.add_argument(
-        '--password', default=os.environ.get('NEO4J_PASSWORD'),
+        '--password', default=os.environ.get('NEO4J_PASSWORD',NEO4J_PASSWORD),
         help='Neo4j password'
     )
     parser.add_argument(
